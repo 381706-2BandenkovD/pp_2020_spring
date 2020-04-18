@@ -6,6 +6,7 @@
 #include <ctime>
 #include <algorithm>
 #include <iterator>
+#include <utility>
 #include "../../../modules/task_2/bandenkov_d_shell_bancher/shell_batcher.h"
 
 std::vector<int> getRandomVector(int sz) {
@@ -47,22 +48,20 @@ std::vector<int> shellSort(const std::vector<int>& A, int size) {
 }
 
 std::vector<int> shellBatcher_seq(const std::vector<int>& A, const int n, int size) {
-  std::vector<int> res;
   std::vector<std::vector<int>> vec = splitVector(A, n);
-
+  std::vector<int> res;
   for (int i = 0; i < static_cast<int> (vec.size()); i++) {
     vec[i] = shellSort(vec[i], vec[i].size());
   }
-
-  res = oddevenMerge_seq(vec, n, size);
+  const int thread = n;
+  res = oddevenMerge_seq(vec, thread, size);
 
   return res;
 }
 
 std::vector<int> shellBatcher_omp(const std::vector<int>& A, const int n, int size) {
-  std::vector<int> res;
   std::vector<std::vector<int>> vec = splitVector(A, n);
-
+  std::vector<int> res;
 #pragma omp parallel shared(vec)
   {
 #pragma omp for
@@ -70,7 +69,8 @@ std::vector<int> shellBatcher_omp(const std::vector<int>& A, const int n, int si
       vec[i] = shellSort(vec[i], vec[i].size());
     }
   }
-  res = oddevenMerge_omp(vec, n, size);
+  const int thread = n;
+  res = oddevenMerge_omp(vec, thread, size);
   return res;
 }
 
