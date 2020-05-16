@@ -15,7 +15,6 @@ TEST(test_Shell_Betch_sort_seq, test_on_1000_element) {
   ASSERT_EQ(betch, res);
 }
 
-
 TEST(test_Shell_Betch_sort_tbb, test_on_20_elements_2_thread) {
   std::vector<int> res = getRandomVector(20);
   std::vector<int> betch = shellBatcher_tbb(res, 2, 20);
